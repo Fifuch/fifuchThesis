@@ -13,4 +13,9 @@ public class WhereIsMyMoneyWebappApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(WhereIsMyMoneyWebappApplication.class, args);
 	}
+	
+	@Bean
+	public MessageDigest getMessageDigest() throws NoSuchAlgorithmException {
+		return MessageDigest.getInstance("SHA-256");
+	}
 }
