@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0"
+      prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="900.0" spacing="20.0">
+            <children>
+                <DatePicker prefHeight="25.0" prefWidth="110.0"/>
+                <DatePicker prefHeight="25.0" prefWidth="110.0"/>
+                <Button mnemonicParsing="false">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="REFRESH" glyphSize="14"/>
+                    </graphic>
+                </Button>
+                <Button mnemonicParsing="false">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="PLUS" glyphSize="14"/>
+                    </graphic>
+                </Button>
+                <Button mnemonicParsing="false">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="REMOVE" glyphSize="14"/>
+                    </graphic>
+                </Button>
+            </children>
+            <VBox.margin>
+                <Insets left="5.0"/>
+            </VBox.margin>
+        </HBox>
+        <ScrollPane prefHeight="460.0" prefWidth="900.0" vbarPolicy="ALWAYS">
+            <content>
+                <TableView prefHeight="455.0" prefWidth="885.0">
+                    <columns>
+                        <TableColumn prefWidth="0" text="Transaction ID" visible="false"/>
+                        <TableColumn prefWidth="147.5" text="Amount"/>
+                        <TableColumn prefWidth="147.5" text="Date"/>
+                        <TableColumn prefWidth="147.5" text="Type"/>
+                        <TableColumn prefWidth="147.5" text="Payor Name"/>
+                        <TableColumn prefWidth="147.5" text="Payor Surname"/>
+                        <TableColumn prefWidth="147.5" text="Category"/>
+                    </columns>
+                </TableView>
+            </content>
+        </ScrollPane>
+    </children>
+</VBox>
