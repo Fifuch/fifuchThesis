@@ -10,8 +10,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="590.0"
-            prefWidth="1050.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="mainWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="590.0" prefWidth="1050.0" xmlns="http://javafx.com/javafx/8.0.102"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="pl.put.poznan.whereismymoney.controllers.MainWindowController">
     <top>
         <GridPane BorderPane.alignment="CENTER">
             <columnConstraints>
@@ -25,12 +27,12 @@
                 <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="200.0" spacing="5.0"
                       GridPane.columnIndex="1">
                     <children>
-                        <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0">
+                        <Button mnemonicParsing="false" onAction="#performMinimize" prefHeight="24.0" prefWidth="24.0">
                             <graphic>
                                 <MaterialDesignIconView glyphName="WINDOW_MINIMIZE" text=""/>
                             </graphic>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0">
+                        <Button mnemonicParsing="false" onAction="#performClose" prefHeight="24.0" prefWidth="24.0">
                             <graphic>
                                 <FontAwesomeIconView glyphName="REMOVE"/>
                             </graphic>
