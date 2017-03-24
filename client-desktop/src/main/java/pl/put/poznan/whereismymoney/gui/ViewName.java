@@ -1,0 +1,6 @@
+package pl.put.poznan.whereismymoney.gui;
+
+public enum ViewName {
+    MENU, VIEW_WELCOME, VIEW_BUDGET_GENERAL, VIEW_USER_ACCOUNT, VIEW_REGISTRATION, VIEW_ANALYSES,
+    VIEW_TRANSACTION_WIZARD, MAIN_WINDOW
+}
