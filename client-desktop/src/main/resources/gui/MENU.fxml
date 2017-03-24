@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.VBox?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="560.0" prefWidth="150.0" spacing="30" xmlns="http://javafx.com/javafx/8.0.102"
-      xmlns:fx="http://javafx.com/fxml/1">
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.put.poznan.whereismymoney.controllers.MenuController">
     <children>
-        <Button mnemonicParsing="false" prefHeight="90.0" prefWidth="90.0">
+        <Button mnemonicParsing="false" onAction="#goToUserDetails" prefHeight="90.0" prefWidth="90.0">
             <graphic>
                 <FontAwesomeIconView glyphName="USER" glyphSize="45"/>
             </graphic>
         </Button>
-        <Button mnemonicParsing="false" prefHeight="90.0" prefWidth="90.0">
+        <Button mnemonicParsing="false" onAction="#goToBudgetOverview" prefHeight="90.0" prefWidth="90.0">
             <graphic>
                 <FontAwesomeIconView glyphName="MONEY" glyphSize="45"/>
             </graphic>
         </Button>
-        <Button mnemonicParsing="false" prefHeight="90.0" prefWidth="90.0">
+        <Button mnemonicParsing="false" onAction="#goToAnalyses" prefHeight="90.0" prefWidth="90.0">
             <graphic>
                 <FontAwesomeIconView glyphName="BAR_CHART" glyphSize="45"/>
             </graphic>
         </Button>
-        <Button mnemonicParsing="false" prefHeight="90.0" prefWidth="90.0">
+        <Button mnemonicParsing="false" onAction="#performLogout" prefHeight="90.0" prefWidth="90.0">
             <graphic>
                 <FontAwesomeIconView glyphName="SIGN_OUT" glyphSize="45"/>
             </graphic>
