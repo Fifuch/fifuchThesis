@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -10,9 +11,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.PasswordField?>
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0"
-          prefWidth="1040.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1">
+          prefWidth="1040.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="pl.put.poznan.whereismymoney.controllers.RegistrationController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0"/>
         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="347.0" minWidth="347.0" prefWidth="347.0"/>
@@ -22,17 +24,17 @@
     </columnConstraints>
     <rowConstraints>
         <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="138.0" minHeight="10.0" prefHeight="138.0" valignment="BOTTOM" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="158.0" minHeight="158.0" prefHeight="158.0" valignment="BOTTOM" vgrow="SOMETIMES"/>
         <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES"/>
-        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES"/>
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="70.0" minHeight="70.0" prefHeight="70.0" vgrow="SOMETIMES"/>
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
     </rowConstraints>
     <children>
         <Label text="Register" GridPane.columnIndex="3" GridPane.rowIndex="1">
             <font>
-                <Font size="50.0"/>
+                <Font size="64.0"/>
             </font>
         </Label>
         <Label text="Login:" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
@@ -47,26 +49,26 @@
         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="3"
               GridPane.rowIndex="5">
             <children>
-                <TextField/>
-                <TextField/>
+                <PasswordField fx:id="password"/>
+                <PasswordField fx:id="retypedPassword"/>
             </children>
         </VBox>
         <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="3"
               GridPane.rowIndex="6">
             <children>
-                <Button mnemonicParsing="false">
+                <Button mnemonicParsing="false" onAction="#performRegistration">
                     <graphic>
                         <FontAwesomeIconView glyphName="CHECK" glyphSize="14"/>
                     </graphic>
                 </Button>
-                <Button mnemonicParsing="false">
+                <Button mnemonicParsing="false" onAction="#cancelRegistration">
                     <graphic>
                         <FontAwesomeIconView glyphName="CLOSE" glyphSize="14"/>
                     </graphic>
                 </Button>
             </children>
         </HBox>
-        <TextField GridPane.columnIndex="3" GridPane.rowIndex="3"/>
-        <TextField GridPane.columnIndex="3" GridPane.rowIndex="4"/>
+        <TextField fx:id="login" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+        <TextField fx:id="eMail" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
     </children>
 </GridPane>

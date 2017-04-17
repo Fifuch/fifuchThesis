@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+          prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.121"
+          xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="pl.put.poznan.whereismymoney.controllers.generalsubviews.BudgetManagementController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="5.0" minWidth="5.0" prefWidth="5.0"/>
+        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="5.0" minWidth="5.0" prefWidth="5.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <children>
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <children>
+                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                    <children>
+                        <Button mnemonicParsing="false" onAction="#addCategory">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="PLUS" glyphSize="14"/>
+                            </graphic>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#deleteCategory">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="TRASH" glyphSize="14"/>
+                            </graphic>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#refresh">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="REFRESH" glyphSize="14"/>
+                            </graphic>
+                        </Button>
+                    </children>
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                </HBox>
+                <ListView fx:id="categories" onMouseClicked="#onCategorySelection" prefHeight="439.0"
+                          prefWidth="440.0"/>
+            </children>
+        </VBox>
+        <Label text="Categories" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <font>
+                <Font size="26.0"/>
+            </font>
+        </Label>
+        <GridPane GridPane.columnIndex="3" GridPane.rowIndex="3">
+            <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0"
+                                   prefWidth="150.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0"/>
+                <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="259.0" minWidth="10.0"
+                                   prefWidth="125.0"/>
+                <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="214.0" minWidth="10.0"
+                                   prefWidth="155.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="31.0" minHeight="31.0" prefHeight="31.0" valignment="CENTER"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" valignment="CENTER"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" valignment="CENTER"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" valignment="TOP" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="32.0" minHeight="32.0" prefHeight="32.0" valignment="TOP" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="1000.0" minHeight="10.0" prefHeight="102.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <Label text="Current category's limit:" GridPane.rowIndex="1"/>
+                <Label text="New category's limit:" GridPane.rowIndex="2"/>
+                <Button maxWidth="27.0" minWidth="27.0" mnemonicParsing="false" onAction="#addLimit" prefHeight="24.0"
+                        prefWidth="27.0" GridPane.rowIndex="3">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="CHECK" glyphSize="13"/>
+                    </graphic>
+                </Button>
+                <Button mnemonicParsing="false" onAction="#cancelLimit" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="CLOSE" glyphSize="14"/>
+                    </graphic>
+                </Button>
+                <TextField fx:id="categoryLimit" prefHeight="25.0" prefWidth="129.0" GridPane.columnIndex="2"
+                           GridPane.rowIndex="2"/>
+                <Label fx:id="currentLimit" text="-" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                <Label text="Delete budget:" GridPane.rowIndex="5"/>
+                <Button mnemonicParsing="false" onAction="#deleteBudget" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="TRASH" glyphSize="14"/>
+                    </graphic>
+                </Button>
+            </children>
+        </GridPane>
+    </children>
+</GridPane>

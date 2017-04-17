@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -10,9 +12,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0"
-          prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1">
+          prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="pl.put.poznan.whereismymoney.controllers.UserSettingsController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0"/>
         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="120.0" minWidth="120.0" prefWidth="120.0"/>
@@ -52,26 +54,26 @@
         <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="2"
               GridPane.rowIndex="5">
             <children>
-                <Label text="Change password:"/>
-                <Label text="Retype password:"/>
+                <Label text="Old password:"/>
+                <Label text="New password:"/>
             </children>
         </VBox>
         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="4"
               GridPane.rowIndex="5">
             <children>
-                <TextField/>
-                <TextField/>
+                <PasswordField fx:id="oldPassword"/>
+                <PasswordField fx:id="newPassword"/>
             </children>
         </VBox>
         <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="4"
               GridPane.rowIndex="6">
             <children>
-                <Button mnemonicParsing="false">
+                <Button mnemonicParsing="false" onAction="#updateUserData">
                     <graphic>
                         <FontAwesomeIconView glyphName="CHECK" glyphSize="14"/>
                     </graphic>
                 </Button>
-                <Button mnemonicParsing="false">
+                <Button mnemonicParsing="false" onAction="#clear">
                     <graphic>
                         <FontAwesomeIconView glyphName="CLOSE" glyphSize="14"/>
                     </graphic>
@@ -80,14 +82,14 @@
         </HBox>
         <VBox alignment="CENTER" spacing="5.0" GridPane.columnIndex="4" GridPane.rowIndex="3">
             <children>
-                <Label text="current login"/>
-                <TextField/>
+                <Label fx:id="currentLogin"/>
+                <TextField fx:id="newLogin"/>
             </children>
         </VBox>
         <VBox alignment="CENTER" spacing="5.0" GridPane.columnIndex="4" GridPane.rowIndex="4">
             <children>
-                <Label text="current mail"/>
-                <TextField/>
+                <Label fx:id="currentMail"/>
+                <TextField fx:id="newMail"/>
             </children>
         </VBox>
     </children>

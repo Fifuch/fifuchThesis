@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="pl.put.poznan.whereismymoney.controllers.generalsubviews.BudgetOverviewController">
+    <children>
+        <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="900.0" spacing="20.0">
+            <children>
+                <DatePicker fx:id="from" onAction="#onDateSelection" prefHeight="25.0" prefWidth="110.0"/>
+                <DatePicker fx:id="to" onAction="#onDateSelection" prefHeight="25.0" prefWidth="110.0"/>
+                <Button mnemonicParsing="false" onAction="#refresh">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="REFRESH" glyphSize="14"/>
+                    </graphic>
+                </Button>
+                <Button mnemonicParsing="false" onAction="#addTransaction">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="PLUS" glyphSize="14"/>
+                    </graphic>
+                </Button>
+                <Button mnemonicParsing="false" onAction="#removeTransaction">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="TRASH" glyphSize="14"/>
+                    </graphic>
+                </Button>
+            </children>
+            <VBox.margin>
+                <Insets left="5.0"/>
+            </VBox.margin>
+        </HBox>
+        <TableView fx:id="transactions" prefHeight="455.0" prefWidth="900.0">
+            <columns>
+                <TableColumn fx:id="amount" prefWidth="225.0" text="Amount"/>
+                <TableColumn fx:id="date" prefWidth="225.0" text="Date"/>
+                <TableColumn fx:id="type" prefWidth="225.0" text="Type"/>
+                <TableColumn fx:id="category" prefWidth="225.0" text="Category"/>
+            </columns>
+        </TableView>
+    </children>
+</VBox>

@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<VBox prefHeight="560.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1">
+
+<VBox prefHeight="560.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="pl.put.poznan.whereismymoney.controllers.GeneralViewController">
     <children>
         <HBox prefHeight="60.0" prefWidth="200.0" spacing="10.0">
             <children>
-                <ComboBox prefWidth="200.0"/>
-                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="26.0">
+                <ComboBox fx:id="budgetPicker" onAction="#onBudgetSelection" prefWidth="200.0"/>
+                <Button mnemonicParsing="false" onAction="#createBudget" prefHeight="26.0" prefWidth="26.0">
                     <graphic>
                         <FontAwesomeIconView glyphName="PLUS" glyphSize="14"/>
                     </graphic>
@@ -25,17 +29,12 @@
             <tabs>
                 <Tab closable="false" text="Budget Overview">
                     <content>
-                        <fx:include source="BUDGET_OVERVIEW.fxml"/>
+                        <fx:include fx:id="budgetOverview" source="general_subviews/BUDGET_OVERVIEW.fxml"/>
                     </content>
                 </Tab>
                 <Tab closable="false" text="Manage Budget">
                     <content>
-                        <fx:include source="BUDGET_SETTINGS.fxml"/>
-                    </content>
-                </Tab>
-                <Tab closable="false" text="Limits">
-                    <content>
-                        <fx:include source="BUDGET_LIMITS.fxml"/>
+                        <fx:include fx:id="budgetManagement" source="general_subviews/BUDGET_MANAGEMENT.fxml"/>
                     </content>
                 </Tab>
             </tabs>

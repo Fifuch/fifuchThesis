@@ -9,7 +9,7 @@
       prefHeight="560.0" prefWidth="150.0" spacing="30" xmlns="http://javafx.com/javafx/8.0.102"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.put.poznan.whereismymoney.controllers.MenuController">
     <children>
-        <Button mnemonicParsing="false" onAction="#goToUserDetails" prefHeight="90.0" prefWidth="90.0">
+        <Button mnemonicParsing="false" onAction="#goToUserSettings" prefHeight="90.0" prefWidth="90.0">
             <graphic>
                 <FontAwesomeIconView glyphName="USER" glyphSize="45"/>
             </graphic>
