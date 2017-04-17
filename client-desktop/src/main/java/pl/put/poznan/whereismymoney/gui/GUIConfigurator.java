@@ -23,7 +23,7 @@ public class GUIConfigurator {
 
     private void configureWindow(Stage primaryStage) {
         enableWindowDragging(primaryStage);
-        viewManager.switchView(ViewName.VIEW_WELCOME);
+        viewManager.switchView(ViewName.VIEW_SIGN_IN);
     }
 
     private void enableWindowDragging(Stage primaryStage) {
