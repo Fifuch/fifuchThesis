@@ -21,4 +21,5 @@ public class MainWindowController implements Controller {
     private Stage getPrimaryStage() {
         return (Stage) mainWindow.getScene().getWindow();
     }
+
 }
