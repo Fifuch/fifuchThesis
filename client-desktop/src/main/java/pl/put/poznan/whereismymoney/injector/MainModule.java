@@ -10,8 +10,11 @@ import pl.put.poznan.whereismymoney.gui.ViewManager;
 import pl.put.poznan.whereismymoney.gui.ViewName;
 import pl.put.poznan.whereismymoney.gui.utils.FactoryMethodResolver;
 import pl.put.poznan.whereismymoney.gui.utils.GuiceFactoryMethodResolver;
+import pl.put.poznan.whereismymoney.security.SessionManager;
 
 import javax.inject.Singleton;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,9 +26,20 @@ public class MainModule extends AbstractModule {
 
     @Provides
     @Singleton
+    private SessionManager provideSessionManager(MessageDigest messageDigest) {
+        return new SessionManager(messageDigest);
+    }
+
+    @Provides
+    private MessageDigest provideSHA256() throws NoSuchAlgorithmException {
+        return MessageDigest.getInstance("SHA-256");
+    }
+
+    @Provides
+    @Singleton
     private ViewManager provideViewManager(ViewLoader viewLoader) {
         ViewManager viewManager = new ViewManager(viewLoader.loadViews());
-        viewLoader.passViewManagerToControllers(viewManager);
+        viewManager.initControllers();
         return viewManager;
     }
 
