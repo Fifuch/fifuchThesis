@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Pane prefHeight="560.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.put.poznan.whereismymoney.controllers.AnalysesController">
+    <children>
+        <VBox prefHeight="560.0" prefWidth="900.0">
+            <children>
+                <HBox alignment="CENTER" prefHeight="60.0" prefWidth="900.0" spacing="20.0">
+                    <children>
+                        <ComboBox fx:id="budgetPicker" onAction="#onBudgetSelection" prefWidth="150.0" />
+                        <ComboBox fx:id="categoryPicker" onAction="#onCategorySelection" prefWidth="150.0" />
+                  <DatePicker fx:id="fromPicker" onAction="#onPeriodSelection" prefHeight="25.0" prefWidth="118.0" />
+                  <DatePicker fx:id="toPicker" onAction="#onPeriodSelection" prefHeight="25.0" prefWidth="109.0" />
+                    </children>
+                </HBox>
+                <HBox prefHeight="460.0" prefWidth="900.0">
+                    <children>
+                        <PieChart fx:id="outcomeChart" legendVisible="false" title="Outcomes in recent month" />
+                        <VBox alignment="CENTER_LEFT" prefHeight="460.0" prefWidth="400.0" spacing="20.0">
+                            <children>
+                                <HBox spacing="10.0">
+                                    <children>
+                                        <Label text="Income at given time:">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="recentIncome" text="-">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                        <HBox spacing="10.0">
+                           <children>
+                              <Label text="Overall outcome at given time:">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="overallOutcome" text="-">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                                <HBox spacing="10.0">
+                                    <children>
+                                        <Label text="Current category outcome:">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="categoryOutcome" text="-">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox spacing="10.0">
+                                    <children>
+                                        <Label text="Category's stake:">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="categoryStake" text="-">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox spacing="10.0">
+                                    <children>
+                                        <Label text="Category's limit:">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="categoryLimit" text="-">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox spacing="10.0">
+                                    <children>
+                                        <Label text="Limit's usage:">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="limitStake" text="-">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                            </children>
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</Pane>
