@@ -30,9 +30,6 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private List<Budget> ownedBudgets;
-    
-    @ManyToMany(mappedBy = "users")
-    private List<Budget> ordinaryUsedBudgets;
 
     public User() {}
 
@@ -80,13 +77,5 @@ public class User {
 
     public void setOwnedBudget(List<Budget> ownedBudgets) {
         this.ownedBudgets = ownedBudgets;
-    }
-    
-    public List<Budget> getOrdinaryUsedBudgets() {
-        return ordinaryUsedBudgets;
-    }
-    
-    public void setOrdinaryUsedBudgets(List<Budget> ordinaryUsedBudgets) {
-        this.ordinaryUsedBudgets = ordinaryUsedBudgets;
     }
 }

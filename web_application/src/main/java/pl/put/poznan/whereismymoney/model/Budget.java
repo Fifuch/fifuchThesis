@@ -34,10 +34,6 @@ public class Budget {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "transactionAffiliation")
     private List<Transaction> relatedTransactions;
-    
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "Budgets_Users")
-    private List<User> users;
 
     public long getId() {
         return id;
@@ -77,13 +73,5 @@ public class Budget {
 
     public void setRelatedTransactions(List<Transaction> relatedTransactions) {
         this.relatedTransactions = relatedTransactions;
-    }
-    
-    public List<User> getUsers() {
-        return users;
-    }
-    
-    public void setUsers(List<User> users) {
-        this.users = users;
     }
 }

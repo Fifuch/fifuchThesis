@@ -1,6 +1,5 @@
 package pl.put.poznan.whereismymoney.service;
 
-import pl.put.poznan.whereismymoney.dao.UserDao;
 import pl.put.poznan.whereismymoney.model.User;
 import pl.put.poznan.whereismymoney.security.SessionManager;
 
@@ -8,12 +7,10 @@ import javax.inject.Inject;
 
 public class SignInService {
     private SessionManager sessionManager;
-    private UserDao userDao;
 
     @Inject
-    public SignInService(SessionManager sessionManager, UserDao userDao) {
+    public SignInService(SessionManager sessionManager) {
         this.sessionManager = sessionManager;
-        this.userDao = userDao;
     }
 
     public boolean performSignIn(String username, String password) {

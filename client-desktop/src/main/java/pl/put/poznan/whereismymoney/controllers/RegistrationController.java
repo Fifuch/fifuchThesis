@@ -7,6 +7,7 @@ import pl.put.poznan.whereismymoney.gui.ViewManager;
 import pl.put.poznan.whereismymoney.gui.ViewName;
 import pl.put.poznan.whereismymoney.gui.utils.DialogFactory;
 import pl.put.poznan.whereismymoney.gui.utils.builder.WarningBuilder;
+import pl.put.poznan.whereismymoney.http.util.ResponseCodes;
 import pl.put.poznan.whereismymoney.service.RegistrationService;
 
 import javax.inject.Inject;
@@ -23,7 +24,6 @@ public class RegistrationController implements Controller {
 
     @Inject
     public RegistrationController(RegistrationService registrationService) {
-        this.viewManager = viewManager;
         this.registrationService = registrationService;
     }
 
@@ -33,13 +33,20 @@ public class RegistrationController implements Controller {
         String email = eMail.getText();
         String passwordText = password.getText();
         String passwordRetypedText = retypedPassword.getText();
-        boolean registrationSuccessful = registrationService.performRegistration(loginText, email, passwordText, passwordRetypedText);
-        if(registrationSuccessful) {
+        String result = registrationService.performRegistration(loginText, email,
+                passwordText, passwordRetypedText);
+        if (result.equals(ResponseCodes.REGISTERED.toString())) {
             viewManager.switchView(ViewName.VIEW_SIGN_IN);
         } else {
-            DialogFactory.get(new WarningBuilder("Registration failure",
-                    "Some fields are empty or login/email is already in use.")).showAndWait();
+            showErrorMessage(result);
         }
+    }
+
+    private void showErrorMessage(String result) {
+        DialogFactory.get(new WarningBuilder("Registration failure",
+                "Registration failed due to "
+                        + result.replace("_", " ").toLowerCase()
+                        + ".")).showAndWait();
     }
 
     @FXML

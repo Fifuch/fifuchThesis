@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -22,6 +23,9 @@ public class Category {
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "limitation")
+    private BigDecimal limit;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "transactionCategory")
     private List<Transaction> relatedTransactions;
@@ -44,6 +48,14 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public BigDecimal getLimit() {
+        return limit;
+    }
+
+    public void setLimit(BigDecimal limit) {
+        this.limit = limit;
     }
 
     public List<Transaction> getRelatedTransactions() {

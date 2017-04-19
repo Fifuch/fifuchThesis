@@ -1,15 +1,18 @@
 package pl.put.poznan.whereismymoney.injector;
 
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Provides;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClients;
 import pl.put.poznan.whereismymoney.controllers.Controller;
 import pl.put.poznan.whereismymoney.gui.ViewLoader;
 import pl.put.poznan.whereismymoney.gui.ViewManager;
 import pl.put.poznan.whereismymoney.gui.ViewName;
 import pl.put.poznan.whereismymoney.gui.utils.FactoryMethodResolver;
 import pl.put.poznan.whereismymoney.gui.utils.GuiceFactoryMethodResolver;
+import pl.put.poznan.whereismymoney.injector.annotation.Host;
+import pl.put.poznan.whereismymoney.injector.annotation.Registration;
 import pl.put.poznan.whereismymoney.security.SessionManager;
 
 import javax.inject.Singleton;
@@ -19,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainModule extends AbstractModule {
-
     @Override
     protected void configure() {
     }
@@ -53,4 +55,20 @@ public class MainModule extends AbstractModule {
         return new ArrayList<>(ViewName.values().length);
     }
 
+    @Provides
+    private HttpClient provideHttpClient() {
+        return HttpClients.createDefault();
+    }
+
+    @Provides
+    @Registration
+    private String provideRegistrationString(@Host String hostAddress) {
+        return hostAddress + "/register/add";
+    }
+
+    @Provides
+    @Host
+    private String provideHostAddress() {
+        return "http://localhost:8080";
+    }
 }
