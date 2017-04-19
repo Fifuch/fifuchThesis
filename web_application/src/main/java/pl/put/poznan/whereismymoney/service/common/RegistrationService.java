@@ -2,32 +2,34 @@ package pl.put.poznan.whereismymoney.service.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import pl.put.poznan.whereismymoney.dao.UserRepository;
 import pl.put.poznan.whereismymoney.model.User;
+import pl.put.poznan.whereismymoney.service.util.ResponseCodes;
 
 @RestController
-@RequestMapping("/registration")
+@RequestMapping("/register")
 public class RegistrationService {
     private UserRepository userRepository;
-    
+
     @Autowired
     public RegistrationService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    
-    @RequestMapping("/add")
-    public long registrateUser(String username, String email, byte[] password) {
-        long id = 0L;
-        User user = new User(username, email, password);
-        if(!doesUserExist(username, email)) {
-            user = userRepository.save(user);
-            id = user.getId();
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public String registerNewUser(String username, String email, byte[] password) {
+        String response = ResponseCodes.REGISTERED.toString();
+        if (userRepository.findByUsername(username) != null) {
+            response = ResponseCodes.LOGIN_ALREADY_IN_USE.toString();
+        } else if (userRepository.findByEmail(email) != null) {
+            response = ResponseCodes.EMAIL_ALREADY_IN_USE.toString();
+        } else {
+            User user = new User(username, email, password);
+            userRepository.save(user);
         }
-        return id;
+        return response;
     }
-    
-    private boolean doesUserExist(String username, String email) {
-        return userRepository.findByEmail(email) != null || userRepository.findByUsername(username) != null;
-    }
+
 }
