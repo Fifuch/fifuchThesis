@@ -1,5 +1,6 @@
 package pl.put.poznan.whereismymoney.security.authentication;
 
+import com.google.gson.Gson;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -8,44 +9,48 @@ import org.springframework.stereotype.Component;
 import pl.put.poznan.whereismymoney.dao.UserRepository;
 import pl.put.poznan.whereismymoney.model.User;
 
+import java.util.Arrays;
+
 @Aspect
 @Component
 public class AuthenticationChecker {
     private UserRepository userRepository;
-    private TokenCreator tokenCreator;
+    private SessionKeyGenerator sessionKeyGenerator;
+    private Gson gson;
     
     @Autowired
-    public AuthenticationChecker(UserRepository userRepository, TokenCreator tokenCreator) {
+    public AuthenticationChecker(UserRepository userRepository, SessionKeyGenerator sessionKeyGenerator, Gson gson) {
         this.userRepository = userRepository;
-        this.tokenCreator = tokenCreator;
+        this.sessionKeyGenerator = sessionKeyGenerator;
+        this.gson = gson;
     }
     
     @Before("execution(public * pl.put.poznan.whereismymoney.service.secured.*.*(..))")
     public void checkToken(JoinPoint webServiceResponse) throws Throwable {
-        String givenToken = getToken(webServiceResponse);
-        String createdToken = createToken(webServiceResponse);
-        if(!createdToken.equals(givenToken) || givenToken.equals("") || givenToken.equals(" ")) {
+        byte[] obtainedSessionKey = obtainSessionKey(webServiceResponse);
+        byte[] createdSessionKey = generateSessionKey(webServiceResponse);
+        if(!Arrays.equals(obtainedSessionKey, createdSessionKey) && obtainedSessionKey.length > 0) {
             throw new AuthenticationFailedException();
         }
     }
     
-    private String getToken(JoinPoint webServiceResponse) {
+    private byte[] obtainSessionKey(JoinPoint webServiceResponse) {
         Object[] queryParameters = webServiceResponse.getArgs();
-        String token = "";
-        if(queryParameters.length > 1) {
-            token = String.valueOf(queryParameters[1]);
+        byte[] sessionKey = new byte[0];
+        if(queryParameters.length > 0) {
+            sessionKey = gson.fromJson(String.valueOf(queryParameters[0]), byte[].class);
         }
-        return token;
+        return sessionKey;
     }
     
-    private String createToken(JoinPoint webServiceResponse) {
-        String token = "";
+    private byte[] generateSessionKey(JoinPoint webServiceResponse) {
+        byte[] sessionKey = new byte[0];
         Object[] queryParameters = webServiceResponse.getArgs();
-        if(queryParameters.length > 0 && queryParameters[0] instanceof Long) {
-            Long userId = (Long) queryParameters[0];
-            User user = userRepository.findOne(userId);
-            token = tokenCreator.createToken(user);
+        if(queryParameters.length > 1 && queryParameters[1] instanceof String) {
+            String username = String.valueOf(queryParameters[1]);
+            User user = userRepository.findByUsername(username);
+            sessionKey = sessionKeyGenerator.generate(user);
         }
-        return token;
+        return sessionKey;
     }
 }
