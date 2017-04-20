@@ -1,5 +1,6 @@
 package pl.put.poznan.whereismymoney.injector;
 
+import com.google.gson.Gson;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Provides;
@@ -13,6 +14,7 @@ import pl.put.poznan.whereismymoney.gui.utils.FactoryMethodResolver;
 import pl.put.poznan.whereismymoney.gui.utils.GuiceFactoryMethodResolver;
 import pl.put.poznan.whereismymoney.injector.annotation.Host;
 import pl.put.poznan.whereismymoney.injector.annotation.Registration;
+import pl.put.poznan.whereismymoney.injector.annotation.Logon;
 import pl.put.poznan.whereismymoney.security.SessionManager;
 
 import javax.inject.Singleton;
@@ -67,8 +69,19 @@ public class MainModule extends AbstractModule {
     }
 
     @Provides
+    @Logon
+    private String provideSaltProviderAddress(@Host String hostAddress) {
+        return hostAddress + "/logon";
+    }
+
+    @Provides
     @Host
     private String provideHostAddress() {
         return "http://localhost:8080";
+    }
+
+    @Provides
+    private Gson provideGson() {
+        return new Gson();
     }
 }
