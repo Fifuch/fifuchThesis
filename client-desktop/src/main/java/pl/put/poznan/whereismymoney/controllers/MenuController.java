@@ -33,9 +33,9 @@ public class MenuController implements Controller {
 
     @FXML
     private void performLogout() {
-        viewManager.setMenuVisibility(false);
-        viewManager.switchView(ViewName.VIEW_SIGN_IN);
         sessionManager.setUserData(null);
+        viewManager.setMenuVisibility(false);
+        viewManager.switchView(ViewName.VIEW_LOGON);
     }
 
     @Override
