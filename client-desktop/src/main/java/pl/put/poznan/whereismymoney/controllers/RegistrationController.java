@@ -36,7 +36,7 @@ public class RegistrationController implements Controller {
         String result = registrationService.performRegistration(loginText, email,
                 passwordText, passwordRetypedText);
         if (result.equals(ResponseCodes.REGISTERED.toString())) {
-            viewManager.switchView(ViewName.VIEW_SIGN_IN);
+            viewManager.switchView(ViewName.VIEW_LOGON);
         } else {
             showErrorMessage(result);
         }
@@ -51,7 +51,7 @@ public class RegistrationController implements Controller {
 
     @FXML
     private void cancelRegistration() {
-        viewManager.switchView(ViewName.VIEW_SIGN_IN);
+        viewManager.switchView(ViewName.VIEW_LOGON);
     }
 
     @Override

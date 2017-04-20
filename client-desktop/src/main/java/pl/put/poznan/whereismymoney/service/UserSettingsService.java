@@ -41,7 +41,7 @@ public class UserSettingsService {
             operationSuccessful = false;
         }
         if (operationSuccessful) {
-            user.setPassword(sessionManager.digestPassword(newPassword));
+            user.setPassword(sessionManager.generatePasswordDigest(newPassword, new byte[0]));
             user.setEmail(email);
             user.setUsername(login);
             userDao.saveOrUpdate(user);
@@ -52,6 +52,6 @@ public class UserSettingsService {
     private boolean isAnyFieldIncorrectlyFilled(String login, String email, String oldPassword, User user) {
         return login == null || login.equals("") || userDao.getByUsername(login) != null
                 || email == null || email.equals("") || userDao.getByEmail(email) != null
-                || !Arrays.equals(sessionManager.digestPassword(oldPassword), user.getPassword());
+                || !Arrays.equals(sessionManager.generatePasswordDigest(oldPassword, new byte[0]), user.getPassword());
     }
 }
