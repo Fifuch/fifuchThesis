@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,15 +29,21 @@ public class User {
     @Column(name = "password")
     private byte[] password;
 
+    @Column(name = "salt")
+    private byte[] salt;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private List<Budget> ownedBudgets;
 
-    public User() {}
+    public User() {
+        ownedBudgets = new ArrayList<>();
+    }
 
-    public User(String username, String email, byte[] password) {
+    public User(String username, String email, byte[] password, byte[] salt) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.salt = salt;
     }
 
     public long getId() {
@@ -69,6 +76,14 @@ public class User {
 
     public void setPassword(byte[] password) {
         this.password = password;
+    }
+
+    public byte[] getSalt() {
+        return salt;
+    }
+
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
     }
 
     public List<Budget> getOwnedBudget() {
