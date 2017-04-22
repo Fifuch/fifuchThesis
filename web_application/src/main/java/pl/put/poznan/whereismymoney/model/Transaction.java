@@ -37,7 +37,7 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "budget_id")
-    private Budget transactionAffiliation;
+    private Budget relatedBudget;
 
     public long getId() {
         return id;
@@ -79,11 +79,11 @@ public class Transaction {
         this.transactionType = transactionType;
     }
 
-    public Budget getTransactionAffiliation() {
-        return transactionAffiliation;
+    public Budget getRelatedBudget() {
+        return relatedBudget;
     }
 
-    public void setTransactionAffiliation(Budget transactionAffiliation) {
-        this.transactionAffiliation = transactionAffiliation;
+    public void setRelatedBudget(Budget relatedBudget) {
+        this.relatedBudget = relatedBudget;
     }
 }

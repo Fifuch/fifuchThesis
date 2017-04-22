@@ -72,7 +72,7 @@ public class AnalysesController implements Controller {
         toPicker.setValue(null);
         Budget selected = budgetPicker.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            categoryPicker.setItems(FXCollections.observableArrayList(selected.getAvailableCategories()));
+            categoryPicker.setItems(FXCollections.observableArrayList(analysesService.getCategories(selected)));
         }
     }
 
@@ -91,7 +91,7 @@ public class AnalysesController implements Controller {
             Category selected = categoryPicker.getSelectionModel().getSelectedItem();
             LocalDate from = fromPicker.getValue();
             LocalDate to = toPicker.getValue();
-            BigDecimal income = analysesService.getIncome(selected, from, to);
+            BigDecimal income = analysesService.getIncome(categoryPicker.getItems(), from, to);
             BigDecimal outcome = analysesService.getOutcome(selected, from, to);
             BigDecimal generalOutcome = analysesService.getOverallOutcome(categoryPicker.getItems(), from, to);
 
