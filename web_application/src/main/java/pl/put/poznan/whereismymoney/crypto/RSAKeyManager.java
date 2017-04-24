@@ -1,5 +1,9 @@
 package pl.put.poznan.whereismymoney.crypto;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import pl.put.poznan.whereismymoney.service.common.KeyExchangeService;
+
 import java.io.*;
 import java.math.BigInteger;
 import java.nio.file.Files;
@@ -11,6 +15,7 @@ import java.security.spec.RSAPublicKeySpec;
 /**
  * Created by Kheldar on 19-Apr-17.
  */
+@Component
 public class RSAKeyManager {
 
     public static final String PUBLIC_KEY_FILE = "public.key";
@@ -19,6 +24,17 @@ public class RSAKeyManager {
     public static final String RSA = "RSA";
     Key publicKey;
     Key privateKey;
+
+    @Autowired
+    public RSAKeyManager(){
+        try {
+            privateKey = readPrivateKeyFromFile(PRIVATE_KEY_FILE);
+            publicKey = readPublicKeyFromFile(PUBLIC_KEY_FILE);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+
+        }
+    }
 
     public Key getPublicKey() {
         return publicKey;
