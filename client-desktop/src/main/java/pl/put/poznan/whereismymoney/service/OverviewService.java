@@ -1,7 +1,9 @@
 package pl.put.poznan.whereismymoney.service;
 
+import pl.put.poznan.whereismymoney.dao.CategoryDao;
 import pl.put.poznan.whereismymoney.dao.TransactionDao;
 import pl.put.poznan.whereismymoney.model.Budget;
+import pl.put.poznan.whereismymoney.model.Category;
 import pl.put.poznan.whereismymoney.model.Transaction;
 
 import javax.inject.Inject;
@@ -12,14 +14,16 @@ import java.util.stream.Collectors;
 
 public class OverviewService {
     private TransactionDao transactionDao;
+    private CategoryDao categoryDao;
 
     @Inject
-    public OverviewService(TransactionDao transactionDao) {
+    public OverviewService(TransactionDao transactionDao, CategoryDao categoryDao) {
         this.transactionDao = transactionDao;
+        this.categoryDao = categoryDao;
     }
 
-    public List<Transaction> filterTransaction(List<Transaction> transactions, LocalDate from, LocalDate to) {
-        return transactions.stream().filter(dateFilter(from, to)).collect(Collectors.toList());
+    public List<Transaction> filterBudgetTransaction(Budget budget, LocalDate from, LocalDate to) {
+        return transactionDao.getByBudget(budget).stream().filter(dateFilter(from, to)).collect(Collectors.toList());
     }
 
     private Predicate<Transaction> dateFilter(LocalDate from, LocalDate to) {
@@ -36,5 +40,9 @@ public class OverviewService {
 
     public void removeTransaction(Transaction transaction) {
         transactionDao.delete(transaction);
+    }
+
+    public List<Category> getCategories(Budget selectedBudget) {
+        return categoryDao.getByBudget(selectedBudget);
     }
 }

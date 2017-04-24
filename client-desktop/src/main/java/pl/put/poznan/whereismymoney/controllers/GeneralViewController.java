@@ -36,7 +36,8 @@ public class GeneralViewController implements Controller {
 
     @Override
     public void refresh() {
-        initialize();
+        List<Budget> budgets = generalViewService.getBudgets();
+        budgetPicker.setItems(FXCollections.observableArrayList(budgets));
         budgetManagementController.refresh();
         budgetOverviewController.refresh();
     }
@@ -51,11 +52,11 @@ public class GeneralViewController implements Controller {
 
     @FXML
     private void createBudget() {
-        boolean transactionSuccessful = false;
+        boolean operationSuccessful = false;
         Optional<String> name = DialogFactory.get(new BudgetDialogBuilder()).showAndWait();
         if (name.isPresent()) {
-            transactionSuccessful = generalViewService.addBudget(name.get());
-            if (transactionSuccessful) {
+            operationSuccessful = generalViewService.addBudget(name.get());
+            if (operationSuccessful) {
                 refresh();
             } else {
                 DialogFactory.get(new WarningBuilder("Budget creation error",
@@ -68,8 +69,8 @@ public class GeneralViewController implements Controller {
     private void onBudgetSelection() {
         Budget selectedBudget = budgetPicker.getSelectionModel().getSelectedItem();
         budgetManagementController.setSelectedBudget(selectedBudget);
-        budgetManagementController.refresh();
         budgetOverviewController.setSelectedBudget(selectedBudget);
         budgetOverviewController.refresh();
+        budgetManagementController.refresh();
     }
 }

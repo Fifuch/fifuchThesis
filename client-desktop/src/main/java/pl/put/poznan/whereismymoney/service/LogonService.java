@@ -1,6 +1,7 @@
 package pl.put.poznan.whereismymoney.service;
 
 import com.google.gson.Gson;
+import pl.put.poznan.whereismymoney.dao.UserDao;
 import pl.put.poznan.whereismymoney.http.ServerCommunicator;
 import pl.put.poznan.whereismymoney.injector.annotation.Logon;
 import pl.put.poznan.whereismymoney.model.User;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LogonService {
+    private UserDao userDao;
     private SessionManager sessionManager;
     private Gson gson;
     private ServerCommunicator serverCommunicator;
@@ -19,11 +21,12 @@ public class LogonService {
 
     @Inject
     public LogonService(SessionManager sessionManager, Gson gson, ServerCommunicator serverCommunicator,
-                        @Logon String logonAddress) {
+                        @Logon String logonAddress, UserDao userDao) {
         this.sessionManager = sessionManager;
         this.gson = gson;
         this.serverCommunicator = serverCommunicator;
         this.logonAddress = logonAddress;
+        this.userDao = userDao;
     }
 
     public boolean performLogon(String username, String password) {
@@ -32,6 +35,9 @@ public class LogonService {
             byte[] salt = getSalt(username);
             byte[] passwordDigest = sessionManager.generatePasswordDigest(password, salt);
             logonSuccessful = validateCredentials(username, passwordDigest);
+        }
+        if(logonSuccessful) {
+            sessionManager.setUserData(userDao.get());
         }
         return logonSuccessful;
     }

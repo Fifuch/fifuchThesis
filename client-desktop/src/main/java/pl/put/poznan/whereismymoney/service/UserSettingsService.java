@@ -40,18 +40,22 @@ public class UserSettingsService {
         if (isAnyFieldIncorrectlyFilled(login, email, oldPassword, user)) {
             operationSuccessful = false;
         }
+        User newUser = null;
         if (operationSuccessful) {
-            user.setPassword(sessionManager.generatePasswordDigest(newPassword, new byte[0]));
-            user.setEmail(email);
-            user.setUsername(login);
-            userDao.saveOrUpdate(user);
+            newUser = new User(login, email, sessionManager.generatePasswordDigest(newPassword, user.getSalt()));
+            newUser.setSalt(user.getSalt());
+            newUser.setId(user.getId());
+            operationSuccessful = userDao.update(newUser);
+        }
+        if(operationSuccessful) {
+            sessionManager.setUserData(newUser);
+            sessionManager.generateSessionKey();
         }
         return operationSuccessful;
     }
 
     private boolean isAnyFieldIncorrectlyFilled(String login, String email, String oldPassword, User user) {
-        return login == null || login.equals("") || userDao.getByUsername(login) != null
-                || email == null || email.equals("") || userDao.getByEmail(email) != null
-                || !Arrays.equals(sessionManager.generatePasswordDigest(oldPassword, new byte[0]), user.getPassword());
+        return login == null || login.equals("") || email == null || email.equals("")
+                || !Arrays.equals(sessionManager.generatePasswordDigest(oldPassword, user.getSalt()), user.getPassword());
     }
 }

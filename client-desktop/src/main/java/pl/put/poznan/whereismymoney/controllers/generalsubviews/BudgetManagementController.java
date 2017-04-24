@@ -42,7 +42,8 @@ public class BudgetManagementController implements GeneralSubviewController {
             if (operationSuccessful) {
                 generalViewController.refresh();
             } else {
-                DialogFactory.get(new WarningBuilder("Category creation error", "Category named " + name.get() + " is already created.")).showAndWait();
+                DialogFactory.get(new WarningBuilder("Category creation error", "Category named "
+                        + name.get() + " is already created.")).showAndWait();
             }
         }
     }
@@ -53,6 +54,7 @@ public class BudgetManagementController implements GeneralSubviewController {
         String limit = categoryLimit.getText();
         if (category != null) {
             managementService.setNewLimit(category, limit);
+            categoryLimit.clear();
             refresh();
         }
     }
@@ -79,8 +81,10 @@ public class BudgetManagementController implements GeneralSubviewController {
     @FXML
     private void onCategorySelection() {
         Category category = categories.getSelectionModel().getSelectedItem();
-        if (category != null) {
+        if (category != null && category.getLimit() != null) {
             currentLimit.setText(category.getLimit().toPlainString() + " PLN");
+        } else {
+            currentLimit.setText("-");
         }
     }
 
@@ -93,9 +97,10 @@ public class BudgetManagementController implements GeneralSubviewController {
 
     @Override
     public void refresh() {
+        currentLimit.setText("-");
+        categoryLimit.clear();
         if (selectedBudget != null) {
-            selectedBudget = managementService.get(selectedBudget);
-            categories.setItems(FXCollections.observableArrayList(selectedBudget.getAvailableCategories()));
+            categories.setItems(FXCollections.observableArrayList(managementService.getCategories(selectedBudget)));
         } else {
             categories.setItems(null);
         }

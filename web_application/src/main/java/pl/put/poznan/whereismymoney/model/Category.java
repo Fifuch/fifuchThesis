@@ -1,6 +1,5 @@
 package pl.put.poznan.whereismymoney.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,10 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
 @Table(name = "categories")
@@ -27,12 +24,18 @@ public class Category {
     @Column(name = "limitation")
     private BigDecimal limit;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "transactionCategory")
-    private List<Transaction> relatedTransactions;
-
     @ManyToOne
     @JoinColumn(name = "budget_id")
     private Budget relatedBudget;
+
+    public Category() {
+
+    }
+
+    public Category(String name, Budget budget) {
+        this.name = name;
+        this.relatedBudget = budget;
+    }
 
     public long getId() {
         return id;
@@ -56,14 +59,6 @@ public class Category {
 
     public void setLimit(BigDecimal limit) {
         this.limit = limit;
-    }
-
-    public List<Transaction> getRelatedTransactions() {
-        return relatedTransactions;
-    }
-
-    public void setRelatedTransactions(List<Transaction> relatedTransactions) {
-        this.relatedTransactions = relatedTransactions;
     }
 
     public Budget getRelatedBudget() {

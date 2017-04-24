@@ -1,6 +1,7 @@
 package pl.put.poznan.whereismymoney.controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -50,6 +51,13 @@ public class UserSettingsController implements Controller {
         if(!userSettingsService.updateUserData(newLogin.getText(), newMail.getText(), oldPassword.getText(), newPassword.getText())) {
             DialogFactory.get(new WarningBuilder("User update failure",
                     "There is another user with your credentials or some fields are empty.")).showAndWait();
+        } else {
+            clear();
+            Alert successInfo = new Alert(Alert.AlertType.INFORMATION);
+            successInfo.setTitle("User data updated!");
+            successInfo.setContentText("Data updated correctly.");
+            successInfo.show();
         }
+
     }
 }

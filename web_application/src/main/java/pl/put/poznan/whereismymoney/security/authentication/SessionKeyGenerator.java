@@ -11,15 +11,15 @@ import java.security.MessageDigest;
 public class SessionKeyGenerator {
     private final static String ENCODING = "UTF-8";
     private MessageDigest messageDigest;
-    
+
     @Autowired
     public SessionKeyGenerator(MessageDigest messageDigest) {
         this.messageDigest = messageDigest;
     }
-    
+
     public byte[] generate(User user) {
         byte[] token = new byte[0];
-        if(user != null) {
+        if (user != null) {
             try {
                 messageDigest.update(user.getUsername().getBytes(ENCODING));
             } catch (UnsupportedEncodingException e) {

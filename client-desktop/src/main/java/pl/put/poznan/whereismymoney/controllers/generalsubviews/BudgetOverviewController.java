@@ -55,7 +55,7 @@ public class BudgetOverviewController implements GeneralSubviewController {
     private void addTransaction() {
         if(selectedBudget != null) {
             Optional<Transaction> transaction = DialogFactory
-                    .get(new TransactionDialogBuilder(selectedBudget.getAvailableCategories()))
+                    .get(new TransactionDialogBuilder(overviewService.getCategories(selectedBudget)))
                     .showAndWait();
             transaction.ifPresent(value -> overviewService.addTransaction(value, selectedBudget));
             generalViewController.refresh();
@@ -79,7 +79,7 @@ public class BudgetOverviewController implements GeneralSubviewController {
         if (selectedBudget != null) {
             if (!(from.getValue() == null || to.getValue() == null)) {
                 List<Transaction> filteredTransactions = overviewService
-                        .filterTransaction(selectedBudget.getRelatedTransactions(), from.getValue(), to.getValue());
+                        .filterBudgetTransaction(selectedBudget, from.getValue(), to.getValue());
                 transactions.setItems(FXCollections.observableArrayList(filteredTransactions));
             }
         } else {

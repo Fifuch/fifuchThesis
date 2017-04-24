@@ -1,16 +1,11 @@
 package pl.put.poznan.whereismymoney.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -32,11 +27,8 @@ public class User {
     @Column(name = "salt")
     private byte[] salt;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-    private List<Budget> ownedBudgets;
-
     public User() {
-        ownedBudgets = new ArrayList<>();
+
     }
 
     public User(String username, String email, byte[] password, byte[] salt) {
@@ -86,11 +78,4 @@ public class User {
         this.salt = salt;
     }
 
-    public List<Budget> getOwnedBudget() {
-        return ownedBudgets;
-    }
-
-    public void setOwnedBudget(List<Budget> ownedBudgets) {
-        this.ownedBudgets = ownedBudgets;
-    }
 }

@@ -7,6 +7,7 @@ import pl.put.poznan.whereismymoney.model.Category;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.util.List;
 
 public class ManagementService {
     private BudgetDao budgetDao;
@@ -23,22 +24,21 @@ public class ManagementService {
         try {
             numericalLimit = Double.parseDouble(limit);
         } catch (NumberFormatException nfe) {
+
         }
         BigDecimal newLimit = new BigDecimal(numericalLimit);
         categoryToUpdate.setLimit(newLimit);
-        categoryDao.saveOrUpdate(categoryToUpdate);
+        categoryDao.update(categoryToUpdate);
     }
 
     public void delete(Budget budget) {
         budgetDao.delete(budget);
     }
 
-    public Budget get(Budget budget) {
-        return budgetDao.getById(budget.getId());
-    }
-
     public void delete(Category category) {
-        categoryDao.delete(category);
+        if (category != null) {
+            categoryDao.delete(category);
+        }
     }
 
     public boolean addCategory(String name, Budget relatedBudget) {
@@ -50,9 +50,13 @@ public class ManagementService {
             category.setName(name);
             category.setLimit(new BigDecimal(0));
             category.setRelatedBudget(relatedBudget);
-            categoryDao.saveOrUpdate(category);
+            categoryDao.save(category);
             transactionResult = true;
         }
         return transactionResult;
+    }
+
+    public List<Category> getCategories(Budget selectedBudget) {
+        return categoryDao.getByBudget(selectedBudget);
     }
 }
