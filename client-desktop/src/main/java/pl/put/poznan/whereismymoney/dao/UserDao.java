@@ -1,13 +1,17 @@
 package pl.put.poznan.whereismymoney.dao;
 
 import com.google.gson.Gson;
+import pl.put.poznan.whereismymoney.crypto.CryptoUtils;
 import pl.put.poznan.whereismymoney.http.ServerCommunicator;
 import pl.put.poznan.whereismymoney.injector.annotation.Host;
 import pl.put.poznan.whereismymoney.model.User;
 import pl.put.poznan.whereismymoney.security.SessionManager;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.inject.Inject;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.Map;
 
 public class UserDao {
@@ -25,7 +29,11 @@ public class UserDao {
     }
 
     public User get() {
-        Map<String, String> parameters = serverCommunicator.provideBasicParameters(sessionManager);
+        SecretKey aesKey = CryptoUtils.generateAESKey();
+        IvParameterSpec iv = new IvParameterSpec(SecureRandom.getSeed(16));
+
+        Map<String, String> parameters = serverCommunicator.provideBasicParameters(sessionManager,aesKey,iv);
+        parameters.putAll(serverCommunicator.provideEncryptionParameters(aesKey,iv));
         String response;
         try {
             response = serverCommunicator.sendMessageAndWaitForResponse(hostAddress + "/user/get", parameters);
@@ -36,8 +44,12 @@ public class UserDao {
     }
 
     public boolean update(User user) {
-        Map<String, String> parameters = serverCommunicator.provideBasicParameters(sessionManager);
-        parameters.put("modifiedUser", gson.toJson(user));
+        SecretKey aesKey = CryptoUtils.generateAESKey();
+        IvParameterSpec iv = new IvParameterSpec(SecureRandom.getSeed(16));
+
+        Map<String, String> parameters = serverCommunicator.provideBasicParameters(sessionManager,aesKey,iv);
+        parameters.put("modifiedUser", CryptoUtils.encryptParameter(gson.toJson(user),aesKey,iv));
+        parameters.putAll(serverCommunicator.provideEncryptionParameters(aesKey,iv));
         String response;
         try {
             response = serverCommunicator.sendMessageAndWaitForResponse(hostAddress + "/user/modify", parameters);

@@ -22,33 +22,46 @@ public class RSAKeyManager {
     public static final String PRIVATE_KEY_FILE = "private.key";
     public static final int KEYSIZE = 2048;
     public static final String RSA = "RSA";
-    Key publicKey;
-    Key privateKey;
+    PublicKey publicKey;
+    PrivateKey privateKey;
 
     @Autowired
-    public RSAKeyManager(){
+    public RSAKeyManager() {
         try {
             privateKey = readPrivateKeyFromFile(PRIVATE_KEY_FILE);
             publicKey = readPublicKeyFromFile(PUBLIC_KEY_FILE);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
 
         }
     }
 
-    public Key getPublicKey() {
+    public RSAPublicKeySpec getRSAPublicKeySpec() {
+        try {
+            KeyFactory fact = KeyFactory.getInstance(RSA);
+            return fact.getKeySpec(publicKey,
+                    RSAPublicKeySpec.class);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+
+            return null;
+        }
+
+    }
+
+    public PublicKey getPublicKey() {
         return publicKey;
     }
 
-    public void setPublicKey(Key publicKey) {
+    public void setPublicKey(PublicKey publicKey) {
         this.publicKey = publicKey;
     }
 
-    public Key getPrivateKey() {
+    public PrivateKey getPrivateKey() {
         return privateKey;
     }
 
-    public void setPrivateKey(Key privateKey) {
+    public void setPrivateKey(PrivateKey privateKey) {
         this.privateKey = privateKey;
     }
 
@@ -116,7 +129,7 @@ public class RSAKeyManager {
         }
     }
 
-     public PrivateKey readPrivateKeyFromFile(String keyFileName) throws IOException {
+    public PrivateKey readPrivateKeyFromFile(String keyFileName) throws IOException {
         InputStream in = Files.newInputStream(Paths.get(keyFileName));
         ObjectInputStream oin =
                 new ObjectInputStream(new BufferedInputStream(in));

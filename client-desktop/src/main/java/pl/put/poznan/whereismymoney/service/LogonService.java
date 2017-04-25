@@ -1,14 +1,21 @@
 package pl.put.poznan.whereismymoney.service;
 
 import com.google.gson.Gson;
+import pl.put.poznan.whereismymoney.crypto.CryptoUtils;
 import pl.put.poznan.whereismymoney.dao.UserDao;
 import pl.put.poznan.whereismymoney.http.ServerCommunicator;
 import pl.put.poznan.whereismymoney.injector.annotation.Logon;
 import pl.put.poznan.whereismymoney.model.User;
 import pl.put.poznan.whereismymoney.security.SessionManager;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.inject.Inject;
 import java.io.IOException;
+import java.security.KeyFactory;
+import java.security.SecureRandom;
+import java.security.spec.RSAPublicKeySpec;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,17 +54,22 @@ public class LogonService {
     }
 
     private byte[] getSalt(String username) {
-        String saltText = getSaltText(username);
+        SecretKey aesKey = CryptoUtils.generateAESKey();
+        IvParameterSpec iv = new IvParameterSpec(SecureRandom.getSeed(16));
+
+        String saltText = getSaltText(username,aesKey,iv);
         byte[] salt = new byte[0];
         if (!saltText.equals("")) {
-            salt = gson.fromJson(saltText, byte[].class);
+            salt = CryptoUtils.decryptByteArrayParameter(saltText,aesKey,iv);
         }
         return salt;
     }
 
-    private String getSaltText(String username) {
+    private String getSaltText(String username, SecretKey aesKey, IvParameterSpec iv) {
+
         Map<String, String> parameters = new HashMap<>(1);
-        parameters.put("username", username);
+        parameters.put("username", CryptoUtils.encryptParameter(username,aesKey,iv));
+        parameters.putAll(serverCommunicator.provideEncryptionParameters(aesKey,iv));
         String saltText;
         try {
             saltText = serverCommunicator.sendMessageAndWaitForResponse(logonAddress + "/salt", parameters);
@@ -85,16 +97,33 @@ public class LogonService {
     }
 
     private boolean validateOnServer() {
+        SecretKey aesKey = CryptoUtils.generateAESKey();
+        IvParameterSpec iv = new IvParameterSpec(SecureRandom.getSeed(16));
+
         Map<String, String> parameters = new HashMap<>(2);
-        parameters.put("username", sessionManager.getUserData().getUsername());
-        String sessionKey = gson.toJson(sessionManager.getSessionKey());
+        parameters.put("username", CryptoUtils.encryptParameter(sessionManager.getUserData().getUsername(),aesKey,iv));
+        String sessionKey = CryptoUtils.encryptParameter(sessionManager.getSessionKey(),aesKey,iv);
         parameters.put("sessionKey", sessionKey);
+        parameters.putAll(serverCommunicator.provideEncryptionParameters(aesKey,iv));
         String validationResult;
         try {
             validationResult = serverCommunicator.sendMessageAndWaitForResponse(logonAddress + "/verify", parameters);
         } catch (IOException e) {
             validationResult = "false";
         }
-        return gson.fromJson(validationResult, boolean.class);
+        return Boolean.parseBoolean(CryptoUtils.decryptStringParameter(validationResult,aesKey,iv));
+    }
+
+    public void getKey()  {
+        try {
+            String key;
+            Map<String, String> parameters = new HashMap<>();
+            key = serverCommunicator.sendMessageAndWaitForResponse(logonAddress + "/publicKey/get", parameters);
+            KeyFactory fact = KeyFactory.getInstance("RSA");
+            CryptoUtils.publicKey = fact.generatePublic(gson.fromJson(key, RSAPublicKeySpec.class));
+        }catch (Exception e){
+            System.err.println("CANNOT GET PUBLIC KEY!");
+        }
+
     }
 }
