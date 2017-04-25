@@ -43,15 +43,15 @@ public class LogonService {
         if (user != null) {
             salt = user.getSalt();
         }
-        return gson.toJson(salt);
+        return Encryption.encryptParameter(salt,aesKey,ivParameter);
     }
 
     @PostMapping("/verify")
     public String verifySessionKey(String username, String sessionKey, String cipherKey, String iv) {
         SecretKey aesKey = Encryption.decryptAesKey(cipherKey, rsaKeyManager.getPrivateKey());
         IvParameterSpec ivParameter = Encryption.decryptIv(iv, rsaKeyManager.getPrivateKey());
-
         byte[] obtainedSessionKey = Encryption.decryptByteArrayParameter(sessionKey,aesKey,ivParameter);
+
         String decryptedUsername = Encryption.decryptStringParameter(username,aesKey,ivParameter);
         User user = userRepository.findByUsername(decryptedUsername);
 
