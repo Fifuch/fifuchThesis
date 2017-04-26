@@ -71,7 +71,7 @@ public class LogonService {
         parameters.putAll(serverCommunicator.provideEncryptionParameters(aesKey, iv));
         String saltText;
         try {
-            saltText = serverCommunicator.sendMessageAndWaitForResponse(logonAddress + "logon/salt", parameters);
+            saltText = serverCommunicator.sendMessageAndWaitForResponse(logonAddress + "/logon/salt", parameters);
         } catch (IOException e) {
             saltText = "[]";
         }
@@ -106,7 +106,7 @@ public class LogonService {
         parameters.putAll(serverCommunicator.provideEncryptionParameters(aesKey, iv));
         String validationResult;
         try {
-            validationResult = serverCommunicator.sendMessageAndWaitForResponse(logonAddress + "logon/verify", parameters);
+            validationResult = serverCommunicator.sendMessageAndWaitForResponse(logonAddress + "/logon/verify", parameters);
         } catch (IOException e) {
             validationResult = "false";
         }
