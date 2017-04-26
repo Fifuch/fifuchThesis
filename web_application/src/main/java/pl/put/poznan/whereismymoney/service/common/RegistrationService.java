@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.put.poznan.whereismymoney.crypto.RSAKeyManager;
 import pl.put.poznan.whereismymoney.dao.UserRepository;
 import pl.put.poznan.whereismymoney.model.User;
 import pl.put.poznan.whereismymoney.service.util.ResponseCodes;
@@ -14,11 +15,13 @@ import pl.put.poznan.whereismymoney.service.util.ResponseCodes;
 public class RegistrationService {
     private UserRepository userRepository;
     private Gson gson;
+    private RSAKeyManager rsaKeyManager;
 
     @Autowired
-    public RegistrationService(UserRepository userRepository, Gson gson) {
+    public RegistrationService(UserRepository userRepository, Gson gson, RSAKeyManager rsaKeyManager) {
         this.userRepository = userRepository;
         this.gson = gson;
+        this.rsaKeyManager = rsaKeyManager;
     }
 
     @PostMapping("/add")

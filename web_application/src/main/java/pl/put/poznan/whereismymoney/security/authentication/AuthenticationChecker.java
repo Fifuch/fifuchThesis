@@ -6,9 +6,13 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import pl.put.poznan.whereismymoney.crypto.Encryption;
+import pl.put.poznan.whereismymoney.crypto.RSAKeyManager;
 import pl.put.poznan.whereismymoney.dao.UserRepository;
 import pl.put.poznan.whereismymoney.model.User;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import java.util.Arrays;
 
 @Aspect
@@ -17,12 +21,14 @@ public class AuthenticationChecker {
     private UserRepository userRepository;
     private SessionKeyGenerator sessionKeyGenerator;
     private Gson gson;
+    private RSAKeyManager rsaKeyManager;
 
     @Autowired
     public AuthenticationChecker(UserRepository userRepository, SessionKeyGenerator sessionKeyGenerator, Gson gson) {
         this.userRepository = userRepository;
         this.sessionKeyGenerator = sessionKeyGenerator;
         this.gson = gson;
+        this.rsaKeyManager = new RSAKeyManager();
     }
 
     @Before("execution(public * pl.put.poznan.whereismymoney.service.secured.*.*(..))")
@@ -38,7 +44,9 @@ public class AuthenticationChecker {
         Object[] queryParameters = webServiceResponse.getArgs();
         byte[] sessionKey = new byte[0];
         if (queryParameters.length > 0) {
-            sessionKey = gson.fromJson(String.valueOf(queryParameters[0]), byte[].class);
+            SecretKey key = Encryption.decryptAesKey(String.valueOf(queryParameters[queryParameters.length-2]),rsaKeyManager.getPrivateKey());
+            IvParameterSpec iv= Encryption.decryptIv(String.valueOf(queryParameters[queryParameters.length-1]),rsaKeyManager.getPrivateKey());
+            sessionKey = Encryption.decryptByteArrayParameter(String.valueOf(queryParameters[0]),key,iv);
         }
         return sessionKey;
     }
@@ -47,7 +55,9 @@ public class AuthenticationChecker {
         byte[] sessionKey = new byte[0];
         Object[] queryParameters = webServiceResponse.getArgs();
         if (queryParameters.length > 1 && queryParameters[1] instanceof String) {
-            String username = String.valueOf(queryParameters[1]);
+            SecretKey key = Encryption.decryptAesKey(String.valueOf(queryParameters[queryParameters.length-2]),rsaKeyManager.getPrivateKey());
+            IvParameterSpec iv= Encryption.decryptIv(String.valueOf(queryParameters[queryParameters.length-1]),rsaKeyManager.getPrivateKey());
+            String username = Encryption.decryptStringParameter(String.valueOf(queryParameters[1]),key,iv);
             User user = userRepository.findByUsername(username);
             sessionKey = sessionKeyGenerator.generate(user);
         }

@@ -40,7 +40,7 @@ public class UserDao {
         } catch (IOException e) {
             response = "{}";
         }
-        return gson.fromJson(response, User.class);
+        return gson.fromJson(CryptoUtils.decryptStringParameter(response,aesKey,iv), User.class);
     }
 
     public boolean update(User user) {
@@ -56,6 +56,6 @@ public class UserDao {
         } catch (IOException e) {
             response = "false";
         }
-        return gson.fromJson(response, boolean.class);
+        return Boolean.parseBoolean(CryptoUtils.decryptStringParameter(response,aesKey,iv));
     }
 }
