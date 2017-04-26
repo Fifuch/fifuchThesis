@@ -44,8 +44,6 @@ public class GeneralViewController implements Controller {
 
     @FXML
     private void initialize() {
-        List<Budget> budgets = generalViewService.getBudgets();
-        budgetPicker.setItems(FXCollections.observableArrayList(budgets));
         budgetManagementController.setGeneralViewController(this);
         budgetOverviewController.setGeneralViewController(this);
     }

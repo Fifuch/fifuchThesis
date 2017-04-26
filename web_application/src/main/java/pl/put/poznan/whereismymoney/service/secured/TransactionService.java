@@ -70,10 +70,10 @@ public class TransactionService {
     }
 
     @PostMapping("/add")
-    public String addBudget(String sessionKey, String username, String transaction, String cipherKey, String iv) {
+    public String addTransaction(String sessionKey, String username, String transaction, String cipherKey, String iv) {
         SecretKey aesKey = Encryption.decryptAesKey(cipherKey, rsaKeyManager.getPrivateKey());
         IvParameterSpec ivParameter = Encryption.decryptIv(iv, rsaKeyManager.getPrivateKey());
-
+        transaction = Encryption.decryptStringParameter(transaction,aesKey,ivParameter);
         Transaction newTransaction = gson.fromJson(transaction, Transaction.class);
         if (newTransaction.getRelatedBudget().getOwner().getUsername().equals(Encryption.decryptStringParameter(username,aesKey,ivParameter))) {
             return Encryption.encryptParameter(String.valueOf(transactionRepository.save(newTransaction) != null),aesKey,ivParameter);
@@ -82,14 +82,14 @@ public class TransactionService {
     }
 
     @PostMapping("/delete")
-    public void deleteCategory(String sessionKey, String username, long transactionId, String cipherKey, String iv) {
+    public void deleteTransaction(String sessionKey, String username, String transactionId, String cipherKey, String iv) {
         SecretKey aesKey = Encryption.decryptAesKey(cipherKey, rsaKeyManager.getPrivateKey());
         IvParameterSpec ivParameter = Encryption.decryptIv(iv, rsaKeyManager.getPrivateKey());
-
-        boolean authorizationSuccessful = transactionRepository.findOne(transactionId)
-                .getRelatedBudget().getOwner().getUsername().equals(username);
+        long id = Long.decode(Encryption.decryptStringParameter(transactionId,aesKey,ivParameter));
+        boolean authorizationSuccessful = transactionRepository.findOne(id)
+                .getRelatedBudget().getOwner().getUsername().equals(Encryption.decryptStringParameter(username,aesKey,ivParameter));
         if (authorizationSuccessful) {
-            transactionRepository.delete(transactionId);
+            transactionRepository.delete(id);
         }
     }
 }

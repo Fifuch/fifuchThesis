@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/category")
-class CategoryService {
+public class CategoryService {
     private BudgetRepository budgetRepository;
     private CategoryRepository categoryRepository;
     private TransactionRepository transactionRepository;

@@ -56,11 +56,6 @@ public class AnalysesController implements Controller {
 
     @Override
     public void refresh() {
-        initialize();
-    }
-
-    @FXML
-    private void initialize() {
         List<Budget> budgets = analysesService.getBudgets();
         budgetPicker.setItems(FXCollections.observableArrayList(budgets));
     }
