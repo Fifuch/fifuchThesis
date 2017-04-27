@@ -1,4 +1,8 @@
-package pl.put.poznan.whereismymoney.model;
+package pl.put.poznan.whereismymoney.service.util;
+
+import pl.put.poznan.whereismymoney.model.Budget;
+import pl.put.poznan.whereismymoney.model.Category;
+import pl.put.poznan.whereismymoney.model.TransactionType;
 
 import java.math.BigDecimal;
 import java.util.Date;

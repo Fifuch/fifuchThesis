@@ -13,7 +13,7 @@ import pl.put.poznan.whereismymoney.dao.CategoryRepository;
 import pl.put.poznan.whereismymoney.dao.TransactionRepository;
 import pl.put.poznan.whereismymoney.model.Budget;
 import pl.put.poznan.whereismymoney.model.Transaction;
-import pl.put.poznan.whereismymoney.model.TransactionAndroid;
+import pl.put.poznan.whereismymoney.service.util.TransactionAndroid;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
