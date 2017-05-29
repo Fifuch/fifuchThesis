@@ -5,24 +5,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.put.poznan.whereismymoney.crypto.Encryption;
+import pl.put.poznan.whereismymoney.crypto.RSAKeyManager;
 import pl.put.poznan.whereismymoney.dao.UserRepository;
 import pl.put.poznan.whereismymoney.model.User;
 import pl.put.poznan.whereismymoney.service.util.ResponseCodes;
+
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 
 @RestController
 @RequestMapping("/register")
 public class RegistrationService {
     private UserRepository userRepository;
     private Gson gson;
+    private RSAKeyManager rsaKeyManager;
+    private SecretKey aesKey;
+    IvParameterSpec ivParameter;
 
     @Autowired
-    public RegistrationService(UserRepository userRepository, Gson gson) {
+    public RegistrationService(UserRepository userRepository, Gson gson, RSAKeyManager rsaKeyManager) {
         this.userRepository = userRepository;
         this.gson = gson;
+        this.rsaKeyManager = rsaKeyManager;
     }
 
     @PostMapping("/add")
-    public String registerNewUser(String username, String email, String password, String salt) {
+    public String registerNewUser(String username, String email, String password, String salt, String cipherKey, String iv) {
+        aesKey = Encryption.decryptAesKey(cipherKey, rsaKeyManager.getPrivateKey());
+        ivParameter = Encryption.decryptIv(iv, rsaKeyManager.getPrivateKey());
+
+        username = Encryption.decryptStringParameter(username, aesKey, ivParameter);
+        email = Encryption.decryptStringParameter(email, aesKey, ivParameter);
+        password = Encryption.decryptStringParameter(password, aesKey, ivParameter);
+        salt = Encryption.decryptStringParameter(salt, aesKey, ivParameter);
+
         String response = ResponseCodes.REGISTERED.toString();
         if (userRepository.findByUsername(username) != null) {
             response = ResponseCodes.LOGIN_ALREADY_IN_USE.toString();
@@ -34,7 +51,7 @@ public class RegistrationService {
             User user = new User(username, email, passwordBytes, saltBytes);
             userRepository.save(user);
         }
-        return response;
+        return Encryption.encryptParameter(response, aesKey, ivParameter);
     }
 
 }

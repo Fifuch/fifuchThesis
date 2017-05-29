@@ -2,6 +2,7 @@ package pl.put.poznan.whereismymoney.dao;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import pl.put.poznan.whereismymoney.crypto.CryptoUtils;
 import pl.put.poznan.whereismymoney.http.ServerCommunicator;
 import pl.put.poznan.whereismymoney.injector.annotation.Host;
 import pl.put.poznan.whereismymoney.model.Budget;
@@ -9,9 +10,12 @@ import pl.put.poznan.whereismymoney.model.Category;
 import pl.put.poznan.whereismymoney.model.Transaction;
 import pl.put.poznan.whereismymoney.security.SessionManager;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +44,12 @@ public class TransactionDao {
     }
 
     public List<Transaction> getByBudget(Budget budget) {
-        Map<String, String> parameters = serverCommunicator.provideBasicParameters(sessionManager);
-        parameters.put("budgetId", budget.getId() + "");
+        SecretKey aesKey = CryptoUtils.generateAESKey();
+        IvParameterSpec iv = new IvParameterSpec(SecureRandom.getSeed(16));
+
+        Map<String, String> parameters = serverCommunicator.provideBasicParameters(sessionManager,aesKey,iv);
+        parameters.put("budgetId", CryptoUtils.encryptParameter(budget.getId() + "",aesKey,iv));
+        parameters.putAll(serverCommunicator.provideEncryptionParameters(aesKey,iv));
         String response;
         try {
             response = serverCommunicator.sendMessageAndWaitForResponse(hostAddress + "/transaction/getByBudget", parameters);
@@ -49,12 +57,16 @@ public class TransactionDao {
             response = "[]";
         }
         Type transactionListFormatter = new TypeToken<ArrayList<Transaction>>(){}.getType();
-        return gson.fromJson(response, transactionListFormatter);
+        return gson.fromJson(CryptoUtils.decryptStringParameter(response,aesKey,iv), transactionListFormatter);
     }
 
     public List<Transaction> getByCategory(Category category) {
-        Map<String, String> parameters = serverCommunicator.provideBasicParameters(sessionManager);
-        parameters.put("categoryId", category.getId() + "");
+        SecretKey aesKey = CryptoUtils.generateAESKey();
+        IvParameterSpec iv = new IvParameterSpec(SecureRandom.getSeed(16));
+
+        Map<String, String> parameters = serverCommunicator.provideBasicParameters(sessionManager,aesKey,iv);
+        parameters.put("categoryId", CryptoUtils.encryptParameter(category.getId() + "",aesKey,iv));
+        parameters.putAll(serverCommunicator.provideEncryptionParameters(aesKey,iv));
         String response;
         try {
             response = serverCommunicator.sendMessageAndWaitForResponse(hostAddress + "/transaction/getByCategory", parameters);
@@ -62,12 +74,16 @@ public class TransactionDao {
             response = "[]";
         }
         Type categoryListFormatter = new TypeToken<ArrayList<Transaction>>(){}.getType();
-        return gson.fromJson(response, categoryListFormatter);
+        return gson.fromJson(CryptoUtils.decryptStringParameter(response,aesKey,iv), categoryListFormatter);
     }
 
     public void saveOrUpdate(Transaction transaction) {
-        Map<String, String> parameters = serverCommunicator.provideBasicParameters(sessionManager);
-        parameters.put("transaction", gson.toJson(transaction));
+        SecretKey aesKey = CryptoUtils.generateAESKey();
+        IvParameterSpec iv = new IvParameterSpec(SecureRandom.getSeed(16));
+
+        Map<String, String> parameters = serverCommunicator.provideBasicParameters(sessionManager,aesKey,iv);
+        parameters.put("transaction", CryptoUtils.encryptParameter(gson.toJson(transaction),aesKey,iv));
+        parameters.putAll(serverCommunicator.provideEncryptionParameters(aesKey,iv));
         String result;
         try {
             result = serverCommunicator.sendMessageAndWaitForResponse(hostAddress + "/transaction/add", parameters);
@@ -77,8 +93,13 @@ public class TransactionDao {
     }
 
     public void delete(Transaction transaction) {
-        Map<String, String> parameters = serverCommunicator.provideBasicParameters(sessionManager);
-        parameters.put("transactionId", transaction.getId() + "");
+        SecretKey aesKey = CryptoUtils.generateAESKey();
+        IvParameterSpec iv = new IvParameterSpec(SecureRandom.getSeed(16));
+
+        Map<String, String> parameters = serverCommunicator.provideBasicParameters(sessionManager,aesKey,iv);
+        parameters.put("transactionId", CryptoUtils.encryptParameter(transaction.getId() + "",aesKey,iv));
+        parameters.putAll(serverCommunicator.provideEncryptionParameters(aesKey,iv));
+
         try {
             serverCommunicator.sendMessageAndWaitForResponse(hostAddress + "/transaction/delete", parameters);
         } catch (IOException e) {

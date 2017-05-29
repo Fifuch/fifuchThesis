@@ -11,6 +11,7 @@ import pl.put.poznan.whereismymoney.model.User;
 import pl.put.poznan.whereismymoney.security.authentication.SessionKeyGenerator;
 
 import java.security.Key;
+import java.security.spec.RSAPublicKeySpec;
 import java.util.Arrays;
 
 @RestController
@@ -28,7 +29,7 @@ public class KeyExchangeService {
 
     @PostMapping("/get")
     public String getPublicKey() {
-            Key publicKey = rsaKeyManager.getPublicKey();
+            RSAPublicKeySpec publicKey = rsaKeyManager.getRSAPublicKeySpec();
            return gson.toJson(publicKey);
 
     }

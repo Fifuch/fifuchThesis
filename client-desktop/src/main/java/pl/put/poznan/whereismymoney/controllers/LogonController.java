@@ -7,9 +7,12 @@ import pl.put.poznan.whereismymoney.gui.ViewManager;
 import pl.put.poznan.whereismymoney.gui.ViewName;
 import pl.put.poznan.whereismymoney.gui.utils.DialogFactory;
 import pl.put.poznan.whereismymoney.gui.utils.builder.WarningBuilder;
+import pl.put.poznan.whereismymoney.http.ServerCommunicator;
 import pl.put.poznan.whereismymoney.service.LogonService;
 
 import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LogonController implements Controller {
     private ViewManager viewManager;
@@ -23,6 +26,7 @@ public class LogonController implements Controller {
     @Inject
     public LogonController(LogonService logonService) {
         this.logonService = logonService;
+        logonService.getKey();
     }
 
     @FXML
@@ -56,4 +60,8 @@ public class LogonController implements Controller {
     public void setViewManager(ViewManager viewManager) {
         this.viewManager = viewManager;
     }
+
+
+
+
 }

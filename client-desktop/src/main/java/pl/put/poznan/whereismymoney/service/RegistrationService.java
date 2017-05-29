@@ -1,10 +1,13 @@
 package pl.put.poznan.whereismymoney.service;
 
 import com.google.gson.Gson;
+import pl.put.poznan.whereismymoney.crypto.CryptoUtils;
 import pl.put.poznan.whereismymoney.http.ServerCommunicator;
 import pl.put.poznan.whereismymoney.http.util.ResponseCodes;
 import pl.put.poznan.whereismymoney.injector.annotation.Registration;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -19,6 +22,8 @@ public class RegistrationService {
     private final String registrationAddress;
     private final SecureRandom secureRandom;
     private Gson gson;
+    private SecretKey aesKey;
+    private IvParameterSpec iv;
 
     @Inject
     public RegistrationService(MessageDigest messageDigest, ServerCommunicator serverCommunicator,
@@ -31,6 +36,7 @@ public class RegistrationService {
     }
 
     public String performRegistration(String username, String email, String password, String retypedPassword) {
+        generateKeys();
         String response = ResponseCodes.NONIDENTICAL_PASSWORDS.toString();
         if (!isAnyFieldEmpty(username, email, password) && password.equals(retypedPassword)) {
             try {
@@ -41,7 +47,16 @@ public class RegistrationService {
                 response = ResponseCodes.COMMUNICATION_ERROR.toString();
             }
         }
-        return response;
+        if (response.equals(ResponseCodes.COMMUNICATION_ERROR.toString())
+                || response.equals(ResponseCodes.NONIDENTICAL_PASSWORDS.toString())) {
+            return response;
+        }
+        return CryptoUtils.decryptStringParameter(response, aesKey, iv);
+    }
+
+    private void generateKeys() {
+        aesKey = CryptoUtils.generateAESKey();
+        iv = new IvParameterSpec(SecureRandom.getSeed(16));
     }
 
     private byte[] generateSalt() {
@@ -58,10 +73,11 @@ public class RegistrationService {
                                                               byte[] salt) throws UnsupportedEncodingException {
         byte[] passwordDigest = generateDigest(password, salt);
         Map<String, String> parameters = new HashMap<>(3);
-        parameters.put("username", username);
-        parameters.put("email", email);
-        parameters.put("password", gson.toJson(passwordDigest));
-        parameters.put("salt", gson.toJson(salt));
+        parameters.put("username", CryptoUtils.encryptParameter(username, aesKey, iv));
+        parameters.put("email", CryptoUtils.encryptParameter(email, aesKey, iv));
+        parameters.put("password", CryptoUtils.encryptParameter(gson.toJson(passwordDigest), aesKey, iv));
+        parameters.put("salt", CryptoUtils.encryptParameter(gson.toJson(salt), aesKey, iv));
+        parameters.putAll(serverCommunicator.provideEncryptionParameters(aesKey,iv));
         return parameters;
     }
 
