@@ -1,2 +1,0 @@
-## whereismymoney
-Web application.

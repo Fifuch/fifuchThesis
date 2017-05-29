@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox prefHeight="560.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="pl.put.poznan.whereismymoney.controllers.GeneralViewController">
+      fx:controller="pl.put.poznan.thesis.controllers.GeneralViewController">
     <children>
         <HBox prefHeight="60.0" prefWidth="200.0" spacing="10.0">
             <children>

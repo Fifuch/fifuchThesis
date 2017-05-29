@@ -16,7 +16,7 @@
 <ScrollPane focusTraversable="false" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="560.0" prefWidth="1050.0" vbarPolicy="NEVER"
             xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="pl.put.poznan.whereismymoney.controllers.LogonController">
+            fx:controller="pl.put.poznan.thesis.controllers.LogonController">
     <content>
         <GridPane alignment="CENTER" prefHeight="560.0" prefWidth="1036.0">
             <columnConstraints>

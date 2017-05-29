@@ -7,7 +7,7 @@
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="560.0" prefWidth="150.0" spacing="30" xmlns="http://javafx.com/javafx/8.0.102"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.put.poznan.whereismymoney.controllers.MenuController">
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.put.poznan.thesis.controllers.MenuController">
     <children>
         <Button mnemonicParsing="false" onAction="#goToUserSettings" prefHeight="90.0" prefWidth="90.0">
             <graphic>
